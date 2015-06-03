@@ -4,9 +4,9 @@ import org.lwjgl.Sys;
 
 public class LogicHelper
 {
-	private static long lastFrame;
+	public static long lastFrame;
 
-	private static long getTime()
+	public static long getTime()
 	{
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}

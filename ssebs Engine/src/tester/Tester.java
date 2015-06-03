@@ -7,6 +7,7 @@ import org.newdawn.slick.opengl.Texture;
 import engine.AudioHelper;
 import engine.LogicHelper;
 import engine.RenderHelper;
+import engine.URLDataHelper;
 
 public class Tester
 {
@@ -57,6 +58,11 @@ public class Tester
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
 		{
 			y += delta / 1.25;
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+		{
+			System.out.println(URLDataHelper.getStringDataAsString("https://raw.githubusercontent.com/ssebs/ssebsEngine/master/ssebs%20Engine/Misc/serverTestFile.txt"));
 		}
 
 	}
