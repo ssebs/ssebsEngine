@@ -23,17 +23,12 @@ public class URLDataHelper
 			while ((inputLine = in.readLine()) != null)
 				stringData.add(inputLine);
 			in.close();
+			//System.out.println("Time taken to get data: " + LogicHelper.getDelta());
 		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-
-		System.out.println("Here's the data taken from the server");
-		for (String string : stringData)
-		{
-			System.out.println(string);
-		}
-
+		
 		return stringData;
 	}
 
@@ -47,7 +42,7 @@ public class URLDataHelper
 		}
 		try
 		{
-			LogicHelper.lastFrame = LogicHelper.getTime();
+			LogicHelper._lastFrame = LogicHelper.getTime();
 			URL givenUrl = new URL(url);
 			URLConnection urlConnection = givenUrl.openConnection();
 			BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -60,7 +55,7 @@ public class URLDataHelper
 				}
 			}
 			in.close();
-			System.out.println("Time taken to get data: " + LogicHelper.getDelta());
+			//System.out.println("Time taken to get data: " + LogicHelper.getDelta());
 		} catch (IOException e)
 		{
 			e.printStackTrace();

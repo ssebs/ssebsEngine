@@ -1,7 +1,6 @@
 package engine;
 
 import java.awt.Font;
-import java.util.ArrayList;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
@@ -9,6 +8,7 @@ import org.newdawn.slick.TrueTypeFont;
 public class Logger 
 {
 	TrueTypeFont _font;
+	private static long _timer = 0;
 	
 	/**
 	 * Logger Constructor, this class will display strings on the display
@@ -18,8 +18,7 @@ public class Logger
 	{		
 		_font = new TrueTypeFont(awtFont, true);
 	}
-	
-	
+		
 	public void log(String logTxt)
 	{
 		_font.drawString(10, 10, logTxt, Color.black);
@@ -49,5 +48,6 @@ public class Logger
 	{
 		_font.drawString(x, y, logTxt, c);
 	}
+
 	
 }

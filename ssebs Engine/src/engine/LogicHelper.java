@@ -4,8 +4,8 @@ import org.lwjgl.Sys;
 
 public class LogicHelper
 {
-	public static long lastFrame;
-
+	public static long _lastFrame;
+	
 	public static long getTime()
 	{
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
@@ -17,8 +17,8 @@ public class LogicHelper
 	public static double getDelta()
 	{
 		long currentTime = getTime();
-		double delta = (double) currentTime - (double) lastFrame;
-		lastFrame = getTime();
+		double delta = (double) currentTime - (double) _lastFrame;
+		_lastFrame = getTime();
 		return delta;
 	}
 
