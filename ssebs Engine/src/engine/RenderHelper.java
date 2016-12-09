@@ -22,12 +22,13 @@ public class RenderHelper
 {
 	private static Texture loadingTexture;
 
-	public static void createDisplay(final int WIDTH, final int HEIGHT, String title)
+	public static void createDisplay(final int WIDTH, final int HEIGHT, boolean VSYNC, String title)
 	{
 		try
 		{
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.setTitle(title);
+			Display.setVSyncEnabled(VSYNC);
 			Display.setInitialBackground(0, 0, 0);
 			try
 			{

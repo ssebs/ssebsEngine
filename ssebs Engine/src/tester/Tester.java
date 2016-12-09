@@ -21,6 +21,7 @@ public class Tester
 {
 	private static int WIDTH, HEIGHT, MOUSEINVERT;
 	private static float SENSITIVITY;
+	private static boolean VSYNC;
 	
 	private static Texture txtr_background, txtr_dargon, txtr_trackpad;
 
@@ -34,10 +35,10 @@ public class Tester
 	{
 		init();	// Gets settings from file then sets vars
 		
-		RenderHelper.createDisplay(WIDTH, HEIGHT, "ssebs Engine");
-		AudioHelper.createAL();
+		RenderHelper.createDisplay(WIDTH, HEIGHT, VSYNC, "ssebs Engine");
+		//AudioHelper.createAL();
 		
-		AudioHelper.playSound("Whoosh.wav");
+		//AudioHelper.playSound("Whoosh.wav");
 		
 		//Load in the textures
 		txtr_background = RenderHelper.loadTexture(txtr_background, "res/BackgroundTexture.png");
@@ -136,16 +137,11 @@ public class Tester
 				 HEIGHT = Integer.parseInt(s.substring("HEIGHT=".length()));
 			if (s.startsWith("SENSITIVITY"))
 				 SENSITIVITY = Float.parseFloat(s.substring("SENSITIVITY=".length()));
+			if (s.startsWith("VSYNC"))
+				VSYNC = Boolean.getBoolean(s.substring("VSYNC".length()));
 			
 			if (s.startsWith("MOUSEINVERT"))
-			{
-				if(s.endsWith("FALSE"))
-					MOUSEINVERT = -1;
-				else if (s.endsWith("TRUE"))
-					MOUSEINVERT = 1;
-				else 
-					MOUSEINVERT = -1; System.out.println(s);
-			}
+				MOUSEINVERT = (s.endsWith("TRUE")) ? 1 : -1;
 		}
 		settings = null;
 		
