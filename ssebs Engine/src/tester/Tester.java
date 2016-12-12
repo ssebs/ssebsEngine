@@ -1,6 +1,7 @@
 package tester;
 
 import java.awt.Font;
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -38,6 +39,7 @@ public class Tester
 	
 	public static void main(String[] args)
 	{
+		System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
 		init();	// Gets settings from file then sets vars
 		
 		RenderHelper.createDisplay(WIDTH, HEIGHT, VSYNC, "ssebs Engine");

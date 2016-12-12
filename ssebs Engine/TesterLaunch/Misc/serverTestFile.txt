@@ -1,0 +1,5 @@
+#This is a server text file for a java application that I'm working on.
+This is the first line of the file that should be read.
+This is the second line that should be read.
+1234
+Those are test numbers
