@@ -22,7 +22,7 @@ public class Tester
 {
 	private static int WIDTH, HEIGHT, MOUSEINVERT;
 	private static float SENSITIVITY;
-	private static boolean VSYNC;
+	private static boolean VSYNC, NOCOLLIDE;
 	
 	private static Texture txtr_background, txtr_face, txtr_trackpad;
 
@@ -31,6 +31,10 @@ public class Tester
 	private static int _fontSize;
 	
 	private static Logger _logger;
+	
+	
+	//TODO: Add timer to logger
+	
 	
 	public static void main(String[] args)
 	{
@@ -119,30 +123,40 @@ public class Tester
 			}
 		}
 		
+		if (Mouse.isButtonDown(1))
+		{
+			NOCOLLIDE = true;
+			_x = Mouse.getX();
+			_y = HEIGHT - Mouse.getY();
+		}else
+		{
+			NOCOLLIDE = false;
+		}
+		
 		if (Mouse.isButtonDown(2))
 		{
 			_x +=  Mouse.getDX();
 			_y += -1 * Mouse.getDY(); // Dont want to invert for this as it matched screenspace
 		}
+		
 	}
 	
 	private static void gameplay(long delta)
 	{
 		int distance = 15;
 		
-		// Colliding with edges
-		if(_x <= distance || _x >= (WIDTH - txtr_face.getImageWidth()) - distance)
-		{
-			_logger.log("COLLIDING", _fontSize * 3, Color.red);
-			_x = (WIDTH/2) - txtr_face.getImageWidth()/2; 
-			_y = (HEIGHT/2) - txtr_face.getImageHeight()/2; 
-		}
-		
-		if (_y <= distance || _y >= (HEIGHT - txtr_face.getImageHeight()) - distance ) 
-		{
-			_logger.log("COLLIDING", _fontSize * 3, Color.red);
-			_x = (WIDTH/2) - txtr_face.getImageWidth()/2; 
-			_y = (HEIGHT/2) - txtr_face.getImageHeight()/2; 
+		if (!NOCOLLIDE) {
+			// Colliding with edges
+			if (_x <= distance || _x >= (WIDTH - txtr_face.getImageWidth()) - distance) {
+				_logger.log("COLLIDING", _fontSize * 3, Color.red);
+				_x = (WIDTH / 2) - txtr_face.getImageWidth() / 2;
+				_y = (HEIGHT / 2) - txtr_face.getImageHeight() / 2;
+			}
+			if (_y <= distance || _y >= (HEIGHT - txtr_face.getImageHeight()) - distance) {
+				_logger.log("COLLIDING", _fontSize * 3, Color.red);
+				_x = (WIDTH / 2) - txtr_face.getImageWidth() / 2;
+				_y = (HEIGHT / 2) - txtr_face.getImageHeight() / 2;
+			} 
 		}
 			
 		
@@ -174,6 +188,7 @@ public class Tester
 		_x = WIDTH / 2 - 128;
 		_y = HEIGHT / 2 - 32;
 		_fontSize = 15;
+		NOCOLLIDE = false;
 	}
 	
 	
