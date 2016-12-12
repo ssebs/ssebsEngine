@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.ResourceLoader;
 
@@ -23,7 +24,7 @@ public class Tester
 	private static float SENSITIVITY;
 	private static boolean VSYNC;
 	
-	private static Texture txtr_background, txtr_dargon, txtr_trackpad;
+	private static Texture txtr_background, txtr_face, txtr_trackpad;
 
 	private static float _x;
 	private static float _y;
@@ -42,7 +43,7 @@ public class Tester
 		
 		//Load in the textures
 		txtr_background = RenderHelper.loadTexture(txtr_background, "res/BackgroundTexture.png");
-		txtr_dargon = RenderHelper.loadTexture(txtr_dargon, "res/Dargon.png");
+		txtr_face = RenderHelper.loadTexture(txtr_face, "res/face256.png");
 		txtr_trackpad = RenderHelper.loadTexture(txtr_trackpad, "res/MoveChar.png");
 		
 		
@@ -63,6 +64,8 @@ public class Tester
 		while (!Display.isCloseRequested())
 		{
 			long delta = (long) LogicHelper.getDelta();
+			render(delta);
+			input(delta);
 			gameplay(delta);
 
 			RenderHelper.updateDisplay(60);
@@ -71,22 +74,24 @@ public class Tester
 		RenderHelper.closeDisplay();
 		AudioHelper.closeAL();
 	}
-
-	private static void gameplay(long delta)
+	
+	private static void render(long delta)
 	{
-		//Vars
-		final float speed = 1.25f;
-		
-		//Render
 		RenderHelper.texRender(txtr_background, 0, 0);
 		RenderHelper.texRender(txtr_trackpad, 0, HEIGHT-txtr_trackpad.getImageHeight());
 
-		RenderHelper.texRender(txtr_dargon, _x, _y);
+		RenderHelper.texRender(txtr_face, _x, _y);
 						
-		_logger.log("Left: " + _x +  " Right: " + (txtr_dargon.getImageWidth() + _x));
+		_logger.log("Left: " + _x +  " Right: " + (txtr_face.getImageWidth() + _x));
 		_logger.log("MOUSE = X: " + Mouse.getX() + ", Y: " + Mouse.getY(), _fontSize);
-		_logger.log("FPS:"+RenderHelper.getFPS(), _fontSize*3);
-
+		_logger.log("FPS:"+RenderHelper.getFPS(), _fontSize*2, new Color(0x41AFFF));
+		
+	}
+	
+	private static void input(long delta)
+	{
+		final float speed = 1.25f;
+				
 		//Input
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 			_x -= delta / speed;
@@ -117,9 +122,29 @@ public class Tester
 		if (Mouse.isButtonDown(2))
 		{
 			_x +=  Mouse.getDX();
-			_y += MOUSEINVERT * Mouse.getDY(); // Invert y
+			_y += -1 * Mouse.getDY(); // Dont want to invert for this as it matched screenspace
+		}
+	}
+	
+	private static void gameplay(long delta)
+	{
+		int distance = 15;
+		
+		// Colliding with edges
+		if(_x <= distance || _x >= (WIDTH - txtr_face.getImageWidth()) - distance)
+		{
+			_logger.log("COLLIDING", _fontSize * 3, Color.red);
+			_x = (WIDTH/2) - txtr_face.getImageWidth()/2; 
+			_y = (HEIGHT/2) - txtr_face.getImageHeight()/2; 
 		}
 		
+		if (_y <= distance || _y >= (HEIGHT - txtr_face.getImageHeight()) - distance ) 
+		{
+			_logger.log("COLLIDING", _fontSize * 3, Color.red);
+			_x = (WIDTH/2) - txtr_face.getImageWidth()/2; 
+			_y = (HEIGHT/2) - txtr_face.getImageHeight()/2; 
+		}
+			
 		
 		
 	} // End gameplay
