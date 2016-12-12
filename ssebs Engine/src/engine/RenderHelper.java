@@ -21,6 +21,9 @@ import org.newdawn.slick.util.ResourceLoader;
 public class RenderHelper
 {
 	private static Texture loadingTexture;
+	private static int _fps;
+	private static int _currentFPS;
+	private static long _lastFps;
 
 	public static void createDisplay(final int WIDTH, final int HEIGHT, boolean VSYNC, String title)
 	{
@@ -46,6 +49,9 @@ public class RenderHelper
 		{
 			e.printStackTrace();
 		}
+		
+		_lastFps = LogicHelper.getTime();
+		
 //		glMatrixMode(GL_PROJECTION);
 //		glLoadIdentity();
 //		glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
@@ -75,6 +81,7 @@ public class RenderHelper
 
 	public static void updateDisplay(final int FPS)
 	{
+		updateFPS();
 		Display.sync(FPS);
 		Display.update();
 	}
@@ -137,4 +144,26 @@ public class RenderHelper
 		
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 	}
-}
+	
+	/**
+	 * Calculate the FPS and set it in the title bar
+	 */
+	private static void updateFPS() 
+	{
+		
+	    if (LogicHelper.getTime() - _lastFps > 1000) 
+	    {
+	        //Display.setTitle("FPS: " + _fps);
+	    	_currentFPS = _fps;
+	        _fps = 0;
+	        _lastFps += 1000;
+	    }
+	    _fps++;
+	}
+	
+	public static int getFPS() 
+	{
+		return _currentFPS;
+	}
+	
+} // End class

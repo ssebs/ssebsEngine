@@ -8,7 +8,6 @@ import org.newdawn.slick.TrueTypeFont;
 public class Logger 
 {
 	TrueTypeFont _font;
-	private static long _timer = 0;
 	
 	/**
 	 * Logger Constructor, this class will display strings on the display

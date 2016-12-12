@@ -85,6 +85,7 @@ public class Tester
 						
 		_logger.log("Left: " + _x +  " Right: " + (txtr_dargon.getImageWidth() + _x));
 		_logger.log("MOUSE = X: " + Mouse.getX() + ", Y: " + Mouse.getY(), _fontSize);
+		_logger.log("FPS:"+RenderHelper.getFPS(), _fontSize*3);
 
 		//Input
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
