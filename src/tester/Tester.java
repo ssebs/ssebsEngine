@@ -34,6 +34,7 @@ public class Tester
 	private static Logger _logger;
 
 	//TODO: Add timer to logger
+	//TODO: Add game class and make Tester override it, similar to Android Activities
 
 	public static void main(String[] args)
 	{
@@ -119,6 +120,7 @@ public class Tester
 
 		if (Mouse.isButtonDown(0))
 		{
+			// in "trackpad" area
 			if (Mouse.getX() <= txtr_trackpad.getImageWidth() && Mouse.getY() <= txtr_trackpad.getImageHeight())
 			{
 				_x += SENSITIVITY * Mouse.getDX();
