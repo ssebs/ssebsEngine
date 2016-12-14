@@ -10,7 +10,7 @@ import engine.Game;
 import engine.RenderHelper;
 import engine.URLDataHelper;
 
-public class Tester extends Game
+public class MyGame extends Game
 {
 	private static boolean  NOCOLLIDE;
 
@@ -31,7 +31,7 @@ public class Tester extends Game
 	 * 	
 	 */
 	
-	public Tester()
+	public MyGame()
 	{
 		super("res/fonts/UbuntuMono-R.ttf");
 		
@@ -152,7 +152,7 @@ public class Tester extends Game
 	
 	public static void main(String[] args)
 	{
-		new Tester();
+		new MyGame();
 	}
 
 }// End class
