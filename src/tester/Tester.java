@@ -1,105 +1,72 @@
 package tester;
 
-import java.awt.Font;
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.util.ResourceLoader;
 
 import engine.AudioHelper;
-import engine.IOUtil;
-import engine.Logger;
-import engine.LogicHelper;
+import engine.Game;
 import engine.RenderHelper;
 import engine.URLDataHelper;
 
-public class Tester
+public class Tester extends Game
 {
-	private static int WIDTH, HEIGHT, MOUSEINVERT;
-	private static float SENSITIVITY;
-	private static boolean VSYNC, NOCOLLIDE;
+	private static boolean  NOCOLLIDE;
 
-	private static Texture txtr_background, txtr_face, txtr_trackpad;
+	private  Texture txtr_background, txtr_face, txtr_trackpad;
 
-	private static float _x;
-	private static float _y;
-	private static int _fontSize;
-
-	private static Logger _logger;
+	private float _x;
+	private float _y;
 
 	//TODO: Add timer to logger
-	//TODO: Add game class and make Tester override it, similar to Android Activities
 
-	public static void main(String[] args)
+	/* Architechture of Game/Inherited class:
+	 * 	Constructor
+	 * 		init()
+	 * 	loop()		<-- called from init()
+	 * 		render()
+	 * 		input()
+	 * 		gameplayLogic()
+	 * 	
+	 */
+	
+	public Tester()
 	{
-		System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
-		init(); // Gets settings from file then sets vars
-
-		RenderHelper.createDisplay(WIDTH, HEIGHT, VSYNC, "ssebs Engine");
-		AudioHelper.createAL();
-
-		//Load in the textures
+		super("res/fonts/UbuntuMono-R.ttf");
+		
 		txtr_background = RenderHelper.loadTexture(txtr_background, "res/engine/BackgroundTexture.png");
 		txtr_face = RenderHelper.loadTexture(txtr_face, "res/face256.png");
 		txtr_trackpad = RenderHelper.loadTexture(txtr_trackpad, "res/MoveChar.png");
 
-		// Load fonts
-		try
-		{
-			InputStream is = ResourceLoader.getResourceAsStream("res/fonts/UbuntuMono-R.ttf");
-			Font fnt = Font.createFont(Font.TRUETYPE_FONT, is);
-			fnt = fnt.deriveFont((float) _fontSize);
-			_logger = new Logger(fnt);
-			System.out.println("Ubuntu font loaded");
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			_logger = new Logger(new Font("Comic Sans MS", Font.BOLD, _fontSize));
-			System.out.println("Comic Sans font used as backup");
-		}
-
-		
 		AudioHelper.playSound("Whoosh.wav");
+		super.gameLoop();
 		
-		// Main game loop
-		while (!Display.isCloseRequested())
-		{
-			long delta = (long) LogicHelper.getDelta();
-			render(delta);
-			input(delta);
-			gameplay(delta);
+	}// End constr
 
-			RenderHelper.updateDisplay(60);
-		}
-
-		RenderHelper.closeDisplay();
-		AudioHelper.closeAL();
-	}
-
-	private static void render(long delta)
+	@Override
+	protected void render(long delta)
 	{
+		// Background
 		RenderHelper.texRender(txtr_background, 0, 0);
 		RenderHelper.texRender(txtr_trackpad, 0, HEIGHT - txtr_trackpad.getImageHeight());
-
+		
+		// Foreground
 		RenderHelper.texRender(txtr_face, (int)_x, (int)_y);
 
+		// Logging
 		_logger.log("Left: " + _x + " Right: " + (txtr_face.getImageWidth() + _x));
 		_logger.log("MOUSE = X: " + Mouse.getX() + ", Y: " + Mouse.getY(), _fontSize);
 		_logger.log("FPS:" + RenderHelper.getFPS(), _fontSize * 2, new Color(0x41AFFF));
 
-	}
-
-	private static void input(long delta)
+	}// End render
+	
+	@Override
+	protected void input(long delta)
 	{
 		final float speed = 1.25f;
 
-		//Input
+		// Keyboard
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 			_x -= delta / speed;
 
@@ -118,6 +85,7 @@ public class Tester
 							"https://raw.githubusercontent.com/ssebs/ssebsEngine/master/ssebs%20Engine/Misc/serverTestFile.txt"),
 					_fontSize * 2);
 
+		// Mouse
 		if (Mouse.isButtonDown(0))
 		{
 			// in "trackpad" area
@@ -137,6 +105,7 @@ public class Tester
 		{
 			NOCOLLIDE = false;
 		}
+		
 
 		if (Mouse.isButtonDown(2))
 		{
@@ -144,9 +113,10 @@ public class Tester
 			_y += -1 * Mouse.getDY(); // Dont want to invert for this as it matched screenspace
 		}
 
-	}
+	}// End input
 
-	private static void gameplay(long delta)
+	@Override
+	protected void gameplayLogic(long delta)
 	{
 		int distance = 15;
 
@@ -169,32 +139,20 @@ public class Tester
 
 	} // End gameplay
 
-	private static void init()
+	@Override
+	protected void init()
 	{
-		ArrayList<String> settings = IOUtil.readFileToArrayList("settings.ini");
-
-		for (String s : settings)
-		{
-			if (!s.startsWith("#"))
-				System.out.print("");
-			if (s.startsWith("WIDTH"))
-				WIDTH = Integer.parseInt(s.substring("WIDTH=".length()));
-			if (s.startsWith("HEIGHT"))
-				HEIGHT = Integer.parseInt(s.substring("HEIGHT=".length()));
-			if (s.startsWith("SENSITIVITY"))
-				SENSITIVITY = Float.parseFloat(s.substring("SENSITIVITY=".length()));
-			if (s.startsWith("VSYNC"))
-				VSYNC = Boolean.getBoolean(s.substring("VSYNC".length()));
-
-			if (s.startsWith("MOUSEINVERT"))
-				MOUSEINVERT = (s.endsWith("TRUE")) ? 1 : -1;
-		}
-		settings = null;
-
+		super.init(); 	// Loads settings from file
+		
 		_x = WIDTH / 2 - 128;
 		_y = HEIGHT / 2 - 32;
 		_fontSize = 15;
 		NOCOLLIDE = false;
+	}// End init
+	
+	public static void main(String[] args)
+	{
+		new Tester();
 	}
 
 }// End class
