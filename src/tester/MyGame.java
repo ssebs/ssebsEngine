@@ -5,7 +5,6 @@ import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
-import engine.AudioHelper;
 import engine.Game;
 import engine.RenderHelper;
 import engine.URLDataHelper;
@@ -33,13 +32,13 @@ public class MyGame extends Game
 	
 	public MyGame()
 	{
-		super("res/fonts/UbuntuMono-R.ttf");
+		super("res/fonts/UbuntuMono-R.ttf", 59);
 		
 		txtr_background = RenderHelper.loadTexture(txtr_background, "res/engine/BackgroundTexture.png");
 		txtr_face = RenderHelper.loadTexture(txtr_face, "res/face256.png");
 		txtr_trackpad = RenderHelper.loadTexture(txtr_trackpad, "res/MoveChar.png");
 
-		AudioHelper.playSound("Whoosh.wav");
+		//AudioHelper.playSound("Whoosh.wav");
 		super.gameLoop();
 		
 	}// End constr
@@ -67,6 +66,10 @@ public class MyGame extends Game
 		final float speed = 1.25f;
 
 		// Keyboard
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+			_logger.timeLog("timer log",500);
+		
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 			_x -= delta / speed;
 

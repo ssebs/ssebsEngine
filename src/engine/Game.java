@@ -14,11 +14,11 @@ public abstract class Game
 	protected float SENSITIVITY;
 	protected boolean VSYNC;
 
-	protected  int _fontSize;
+	protected  int _fontSize, _targetFPS;
 	protected  Logger _logger;
 	
 	
-	public Game(String fontPath) 
+	public Game(String fontPath, int targetFPS) 
 	{
 		System.setProperty("org.lwjgl.librarypath", new File("lib/natives").getAbsolutePath());
 		
@@ -41,6 +41,8 @@ public abstract class Game
 			_logger = new Logger(new Font("Comic Sans MS", Font.BOLD, _fontSize));
 			System.out.println("Comic Sans font used as backup");
 		}
+		
+		_targetFPS = targetFPS;
 		
 		
 	}// End constructor
